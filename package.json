@@ -2,9 +2,8 @@
   "name": "edgar",
   "version": "1.0.0",
   "description": "Amount of POE hodlers over time",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src"
   },
   "repository": {
     "type": "git",
@@ -18,6 +17,10 @@
   },
   "homepage": "https://github.com/lautarodragan/edgar#readme",
   "dependencies": {
+    "koa": "^2.5.1",
+    "koa-body": "^4.0.1",
+    "koa-cors": "0.0.16",
+    "koa-router": "^7.4.0",
     "mongodb": "^3.0.10",
     "node-fetch": "^2.1.2"
   }
