@@ -4,14 +4,11 @@ const Koa = require('koa')
 const KoaRouter = require('koa-router')
 const KoaCors = require('koa-cors')
 
-const SECOND_IN_MS = 1000
-const MINUTE_IN_MS = 60 * SECOND_IN_MS
-
 const defaultIfNaN = defaultValue => input => isNaN(input) ? defaultValue : input
 
 const defaultZeroIfNaN = defaultIfNaN(0)
 
-const dataPointInterval = Math.max(defaultZeroIfNaN(process.env.EDGAR_INTERVAL * MINUTE_IN_MS), MINUTE_IN_MS)
+const dataPointInterval = Math.max(defaultZeroIfNaN(process.env.EDGAR_INTERVAL), 5000)
 
 async function main() {
   const dbPassword = process.env.EDGAR_DB_PASSWORD
