@@ -1,32 +1,20 @@
-const { getDatabase, insertNewEntry } = require('./mongo')
-const { getHodlers } = require('./ethplorer')
 const Koa = require('koa')
 const KoaRouter = require('koa-router')
 const KoaCors = require('koa-cors')
 
-const SECOND_IN_MS = 1000
-const MINUTE_IN_MS = 60 * SECOND_IN_MS
-
-const defaultIfNaN = defaultValue => input => isNaN(input) ? defaultValue : input
-
-const defaultZeroIfNaN = defaultIfNaN(0)
-
-const dataPointInterval = Math.max(defaultZeroIfNaN(process.env.EDGAR_INTERVAL * MINUTE_IN_MS), MINUTE_IN_MS)
+const { getDatabase, insertNewEntry } = require('./mongo')
+const { getHodlers } = require('./ethplorer')
+const { dataPointInterval, dbUrl } = require('./config')
 
 async function main() {
-  const dbPassword = process.env.EDGAR_DB_PASSWORD
-  const dbUrl = `mongodb+srv://edgar:${dbPassword}@edgar-f7n7n.mongodb.net/edgar?retryWrites=true`
-
-  const { mongoClient, collection } = await getDatabase(dbUrl)
+  const { collection } = await getDatabase(dbUrl)
 
   setInterval(updateHodlers(collection), dataPointInterval)
-  // await updateHodlers(collection)()
 
   const koa = await setUpKoa(getHoldersRoute(collection))
 
   koa.listen(process.env.PORT || 3000)
 
-  // await mongoClient.close()
 }
 
 function handleErrors(error) {
